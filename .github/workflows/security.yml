@@ -1,0 +1,125 @@
+name: Security & Code Quality
+
+on:
+  push:
+    branches:
+      - main
+      - develop
+  pull_request:
+    branches:
+      - main
+      - develop
+
+jobs:
+  solhint:
+    name: Solidity Linting
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Run Solhint
+        run: npm run lint
+        continue-on-error: true
+
+      - name: Solhint Summary
+        run: |
+          echo "### Solidity Linting Results 🔍" >> $GITHUB_STEP_SUMMARY
+          echo "Solhint analysis completed" >> $GITHUB_STEP_SUMMARY
+
+  prettier:
+    name: Code Formatting Check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Check formatting
+        run: npm run format:check
+        continue-on-error: true
+
+      - name: Formatting Summary
+        run: |
+          echo "### Code Formatting Check ✨" >> $GITHUB_STEP_SUMMARY
+          echo "Prettier formatting check completed" >> $GITHUB_STEP_SUMMARY
+
+  security-audit:
+    name: Security Audit
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Run npm audit
+        run: npm audit --audit-level=moderate
+        continue-on-error: true
+
+      - name: Security Summary
+        run: |
+          echo "### Security Audit Results 🔒" >> $GITHUB_STEP_SUMMARY
+          echo "npm audit completed" >> $GITHUB_STEP_SUMMARY
+
+  gas-report:
+    name: Gas Usage Report
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci --legacy-peer-deps
+
+      - name: Compile contracts
+        run: npm run compile
+
+      - name: Generate gas report
+        run: npm run test:gas
+        env:
+          REPORT_GAS: true
+
+      - name: Upload gas report
+        uses: actions/upload-artifact@v4
+        with:
+          name: gas-report
+          path: gas-report.txt
+
+      - name: Gas Report Summary
+        run: |
+          echo "### Gas Usage Report ⛽" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          cat gas-report.txt 2>/dev/null || echo "Gas report not available" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
