@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anonymous Court Investigation System - Offline Mode</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .container {
+            max-width: 600px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 40px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        .icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+        .btn {
+            background: #3498db;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 10px;
+            font-size: 16px;
+            transition: background 0.3s ease;
+        }
+        .btn:hover {
+            background: #2980b9;
+        }
+        .status {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .network-info {
+            text-align: left;
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .error-list {
+            text-align: left;
+            max-width: 400px;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="icon">⚖️</div>
+        <h1>Anonymous Court Investigation System</h1>
+        <h2>🌐 Network Connection Required</h2>
+
+        <div class="status">
+            <p>Unable to load required libraries from Content Delivery Networks (CDNs).</p>
+            <p>This application requires an internet connection to function properly.</p>
+        </div>
+
+        <h3>🔧 Troubleshooting Steps:</h3>
+        <div class="error-list">
+            <ol>
+                <li><strong>Check Internet Connection</strong>
+                    <br><small>Ensure you have a stable internet connection</small>
+                </li>
+                <li><strong>Disable VPN/Proxy</strong>
+                    <br><small>Some VPNs may block CDN access</small>
+                </li>
+                <li><strong>Firewall Settings</strong>
+                    <br><small>Allow access to CDN domains</small>
+                </li>
+                <li><strong>DNS Issues</strong>
+                    <br><small>Try using public DNS (8.8.8.8)</small>
+                </li>
+                <li><strong>Browser Extensions</strong>
+                    <br><small>Disable ad blockers temporarily</small>
+                </li>
+            </ol>
+        </div>
+
+        <div class="network-info">
+            <h4>📋 Required Resources:</h4>
+            <ul>
+                <li>Ethers.js Library (Ethereum interaction)</li>
+                <li>Font Awesome Icons (User interface)</li>
+                <li>Zama Devnet Connection (Blockchain network)</li>
+            </ul>
+        </div>
+
+        <div style="margin-top: 30px;">
+            <button onclick="location.reload()" class="btn">
+                🔄 Try Again
+            </button>
+            <a href="test.html" class="btn">
+                🧪 Connection Test
+            </a>
+            <a href="deploy-guide.html" class="btn">
+                📖 Deployment Guide
+            </a>
+        </div>
+
+        <div style="margin-top: 30px; font-size: 0.9rem; opacity: 0.8;">
+            <p><strong>Note:</strong> This is a decentralized application (DApp) that requires blockchain connectivity.</p>
+            <p>For local development, ensure you have access to external CDNs.</p>
+        </div>
+
+        <script>
+            // Simple connectivity test
+            function testConnectivity() {
+                const testUrls = [
+                    'https://cdnjs.cloudflare.com',
+                    'https://unpkg.com',
+                    'https://cdn.jsdelivr.net'
+                ];
+
+                console.log('Testing CDN connectivity...');
+
+                testUrls.forEach(url => {
+                    fetch(url, { mode: 'no-cors' })
+                        .then(() => console.log(`✅ ${url} - Accessible`))
+                        .catch(() => console.log(`❌ ${url} - Not accessible`));
+                });
+            }
+
+            // Auto-test on load
+            setTimeout(testConnectivity, 1000);
+
+            // Periodic retry
+            setInterval(() => {
+                if (navigator.onLine) {
+                    console.log('Online detected, attempting reload...');
+                    setTimeout(() => location.reload(), 2000);
+                }
+            }, 30000); // Check every 30 seconds
+        </script>
+    </div>
+</body>
+</html>
