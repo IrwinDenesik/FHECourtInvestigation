@@ -1,0 +1,45 @@
+#!/usr/bin/env sh
+. "$(dirname -- "$0")/_/husky.sh"
+
+echo "🔍 Running pre-commit security checks..."
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+
+# 1. Lint Solidity code
+echo "📝 Step 1/5: Linting Solidity files..."
+npm run lint || {
+  echo "❌ Solidity linting failed. Please fix errors before committing."
+  exit 1
+}
+
+# 2. Check code formatting
+echo "✨ Step 2/5: Checking code formatting..."
+npm run format:check || {
+  echo "❌ Code formatting check failed. Run 'npm run format' to fix."
+  exit 1
+}
+
+# 3. Lint JavaScript/TypeScript
+echo "🔎 Step 3/5: Linting JavaScript/TypeScript..."
+npx eslint scripts/ test/ --ext .js,.ts || {
+  echo "❌ ESLint check failed. Please fix errors before committing."
+  exit 1
+}
+
+# 4. Run tests
+echo "🧪 Step 4/5: Running tests..."
+npm test || {
+  echo "❌ Tests failed. Please fix failing tests before committing."
+  exit 1
+}
+
+# 5. Security audit
+echo "🔒 Step 5/5: Running security audit..."
+npm audit --audit-level=high || {
+  echo "⚠️  Security vulnerabilities detected. Please review and fix."
+  echo "   Run 'npm audit fix' to attempt automatic fixes."
+  # Don't fail on audit, just warn
+}
+
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+echo "✅ All pre-commit checks passed!"
+echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
