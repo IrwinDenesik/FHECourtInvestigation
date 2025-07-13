@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Status - Anonymous Court Investigation</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .status-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .status-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .status-item:last-child {
+            border-bottom: none;
+        }
+        .status-indicator {
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+        .status-ok { background: #d4edda; color: #155724; }
+        .status-warning { background: #fff3cd; color: #856404; }
+        .status-error { background: #f8d7da; color: #721c24; }
+        .status-loading { background: #cce7ff; color: #004085; }
+        .btn {
+            background: #3498db;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-block;
+            margin: 5px;
+        }
+        .log {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-family: monospace;
+            font-size: 0.9rem;
+            max-height: 300px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="status-card">
+            <h1>🔍 System Status Check</h1>
+            <p>Real-time status of all application components</p>
+        </div>
+
+        <div class="status-card">
+            <h2>📡 Network Connectivity</h2>
+            <div id="networkStatus">
+                <div class="status-item">
+                    <span>Internet Connection</span>
+                    <span class="status-indicator status-loading" id="internetStatus">Checking...</span>
+                </div>
+                <div class="status-item">
+                    <span>CDN Accessibility</span>
+                    <span class="status-indicator status-loading" id="cdnStatus">Checking...</span>
+                </div>
+                <div class="status-item">
+                    <span>Sepolia RPC</span>
+                    <span class="status-indicator status-loading" id="rpcStatus">Checking...</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="status-card">
+            <h2>📚 Library Status</h2>
+            <div id="libraryStatus">
+                <div class="status-item">
+                    <span>Ethers.js Library</span>
+                    <span class="status-indicator status-loading" id="ethersStatus">Checking...</span>
+                </div>
+                <div class="status-item">
+                    <span>Font Awesome Icons</span>
+                    <span class="status-indicator status-loading" id="fontStatus">Checking...</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="status-card">
+            <h2>🔗 Wallet Integration</h2>
+            <div id="walletStatus">
+                <div class="status-item">
+                    <span>MetaMask Detection</span>
+                    <span class="status-indicator status-loading" id="metamaskStatus">Checking...</span>
+                </div>
+                <div class="status-item">
+                    <span>Current Network</span>
+                    <span class="status-indicator status-loading" id="networkChainStatus">Checking...</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="status-card">
+            <h2>📋 System Log</h2>
+            <div class="log" id="systemLog">Initializing status check...\n</div>
+        </div>
+
+        <div class="status-card" style="text-align: center;">
+            <button onclick="runFullCheck()" class="btn">🔄 Refresh All</button>
+            <a href="index.html" class="btn">← Back to App</a>
+            <a href="test.html" class="btn">Connection Test</a>
+        </div>
+    </div>
+
+    <script>
+        let log = '';
+
+        function addLog(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            log += `[${timestamp}] ${message}\n`;
+            document.getElementById('systemLog').textContent = log;
+            console.log(message);
+        }
+
+        function updateStatus(elementId, status, text) {
+            const element = document.getElementById(elementId);
+            element.className = `status-indicator status-${status}`;
+            element.textContent = text;
+        }
+
+        async function checkInternetConnection() {
+            try {
+                const response = await fetch('https://www.google.com/favicon.ico', {
+                    method: 'HEAD',
+                    mode: 'no-cors'
+                });
+                updateStatus('internetStatus', 'ok', 'Connected');
+                addLog('✅ Internet connection: OK');
+                return true;
+            } catch (error) {
+                updateStatus('internetStatus', 'error', 'Offline');
+                addLog('❌ Internet connection: Failed');
+                return false;
+            }
+        }
+
+        async function checkCDNAccess() {
+            const cdns = [
+                'https://cdnjs.cloudflare.com',
+                'https://unpkg.com',
+                'https://cdn.jsdelivr.net'
+            ];
+
+            let accessible = 0;
+            for (const cdn of cdns) {
+                try {
+                    await fetch(cdn, { method: 'HEAD', mode: 'no-cors' });
+                    accessible++;
+                    addLog(`✅ CDN accessible: ${cdn}`);
+                } catch (error) {
+                    addLog(`❌ CDN blocked: ${cdn}`);
+                }
+            }
+
+            if (accessible === cdns.length) {
+                updateStatus('cdnStatus', 'ok', 'All Available');
+            } else if (accessible > 0) {
+                updateStatus('cdnStatus', 'warning', `${accessible}/${cdns.length} Available`);
+            } else {
+                updateStatus('cdnStatus', 'error', 'All Blocked');
+            }
+        }
+
+        async function checkRPCConnection() {
+            try {
+                const response = await fetch('https://sepolia.infura.io/v3/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        jsonrpc: '2.0',
+                        method: 'eth_chainId',
+                        params: [],
+                        id: 1
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    updateStatus('rpcStatus', 'ok', 'Connected');
+                    addLog('✅ Sepolia RPC: Accessible');
+                } else {
+                    throw new Error('RPC request failed');
+                }
+            } catch (error) {
+                updateStatus('rpcStatus', 'error', 'Unreachable');
+                addLog('❌ Sepolia RPC: Failed to connect');
+            }
+        }
+
+        function checkLibraries() {
+            // Check Ethers.js
+            if (typeof ethers !== 'undefined') {
+                updateStatus('ethersStatus', 'ok', `v${ethers.version}`);
+                addLog('✅ Ethers.js: Loaded successfully');
+            } else {
+                updateStatus('ethersStatus', 'error', 'Not Loaded');
+                addLog('❌ Ethers.js: Failed to load');
+            }
+
+            // Check Font Awesome (look for loaded CSS)
+            const fontAwesome = Array.from(document.styleSheets).some(sheet => {
+                try {
+                    return sheet.href && sheet.href.includes('font-awesome');
+                } catch (e) {
+                    return false;
+                }
+            });
+
+            if (fontAwesome) {
+                updateStatus('fontStatus', 'ok', 'Loaded');
+                addLog('✅ Font Awesome: CSS loaded');
+            } else {
+                updateStatus('fontStatus', 'warning', 'Check Required');
+                addLog('⚠️ Font Awesome: Unable to verify');
+            }
+        }
+
+        function checkWallet() {
+            // Check MetaMask
+            if (typeof window.ethereum !== 'undefined') {
+                const walletName = window.ethereum.isMetaMask ? 'MetaMask' : 'Web3 Wallet';
+                updateStatus('metamaskStatus', 'ok', walletName);
+                addLog(`✅ Wallet detected: ${walletName}`);
+
+                // Check network
+                window.ethereum.request({ method: 'eth_chainId' })
+                    .then(chainId => {
+                        const chainIdDecimal = parseInt(chainId, 16);
+                        if (chainIdDecimal === 11155111) {
+                            updateStatus('networkChainStatus', 'ok', 'Sepolia');
+                            addLog('✅ Network: Connected to Sepolia Test Network');
+                        } else {
+                            updateStatus('networkChainStatus', 'warning', `Chain ${chainIdDecimal}`);
+                            addLog(`⚠️ Network: Connected to chain ${chainIdDecimal} (not Sepolia)`);
+                        }
+                    })
+                    .catch(error => {
+                        updateStatus('networkChainStatus', 'error', 'Unknown');
+                        addLog('❌ Network: Unable to detect');
+                    });
+            } else {
+                updateStatus('metamaskStatus', 'error', 'Not Found');
+                updateStatus('networkChainStatus', 'error', 'No Wallet');
+                addLog('❌ Wallet: No Web3 provider detected');
+            }
+        }
+
+        async function runFullCheck() {
+            addLog('🔄 Starting full system check...');
+
+            // Reset all status to loading
+            const statusElements = ['internetStatus', 'cdnStatus', 'rpcStatus', 'ethersStatus', 'fontStatus', 'metamaskStatus', 'networkChainStatus'];
+            statusElements.forEach(id => {
+                updateStatus(id, 'loading', 'Checking...');
+            });
+
+            // Run checks
+            await checkInternetConnection();
+            await checkCDNAccess();
+            await checkRPCConnection();
+            checkLibraries();
+            checkWallet();
+
+            addLog('✅ System check completed');
+        }
+
+        // Load ethers.js for testing
+        function loadEthersForTest() {
+            if (typeof ethers === 'undefined') {
+                const script = document.createElement('script');
+                script.src = 'https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js';
+                script.onload = () => {
+                    addLog('📚 Ethers.js loaded for testing');
+                    checkLibraries();
+                };
+                script.onerror = () => {
+                    addLog('❌ Failed to load Ethers.js for testing');
+                    checkLibraries();
+                };
+                document.head.appendChild(script);
+            }
+        }
+
+        // Initialize
+        window.addEventListener('load', () => {
+            addLog('🚀 Status checker initialized');
+            loadEthersForTest();
+            setTimeout(runFullCheck, 1000);
+        });
+    </script>
+</body>
+</html>
