@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anonymous Court Investigation System</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⚖️</text></svg>">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.0.0/css/all.min.css'">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <div class="header-content">
+                <h1><i class="fas fa-gavel"></i> Anonymous Court Investigation System</h1>
+                <p>Secure, Private, and Transparent Judicial Investigations</p>
+                <div class="wallet-section">
+                    <button id="connectWallet" class="btn btn-primary" onclick="console.log('Button clicked directly'); window.app && window.app.connectWallet()">
+                        <i class="fas fa-wallet"></i> Connect Wallet
+                    </button>
+                    <div id="walletInfo" class="wallet-info" style="display: none;">
+                        <span id="walletAddress"></span>
+                        <button id="disconnectWallet" class="btn btn-secondary">
+                            <i class="fas fa-sign-out-alt"></i> Disconnect
+                        </button>
+                    </div>
+                    <div style="margin-top: 10px;">
+                        <a href="status.html" target="_blank" style="color: white; text-decoration: underline; font-size: 0.9rem; margin-right: 15px;">
+                            <i class="fas fa-heartbeat"></i> System Status
+                        </a>
+                        <a href="network-info.html" target="_blank" style="color: white; text-decoration: underline; font-size: 0.9rem;">
+                            <i class="fas fa-info-circle"></i> Network Info
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <nav class="nav-tabs">
+            <button class="tab-btn active" data-tab="dashboard">
+                <i class="fas fa-tachometer-alt"></i> Dashboard
+            </button>
+            <button class="tab-btn" data-tab="investigations">
+                <i class="fas fa-search"></i> Investigations
+            </button>
+            <button class="tab-btn" data-tab="evidence">
+                <i class="fas fa-file-alt"></i> Evidence
+            </button>
+            <button class="tab-btn" data-tab="witnesses">
+                <i class="fas fa-user-secret"></i> Witnesses
+            </button>
+            <button class="tab-btn" data-tab="verdicts">
+                <i class="fas fa-balance-scale"></i> Verdicts
+            </button>
+            <button class="tab-btn" data-tab="admin">
+                <i class="fas fa-cog"></i> Admin
+            </button>
+        </nav>
+
+        <main class="main-content">
+            <!-- Dashboard Tab -->
+            <div id="dashboard" class="tab-content active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-folder-open"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalInvestigations">0</h3>
+                            <p>Total Investigations</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-play"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="activeInvestigations">0</h3>
+                            <p>Active Cases</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalEvidence">0</h3>
+                            <p>Evidence Submitted</p>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-user-secret"></i>
+                        </div>
+                        <div class="stat-info">
+                            <h3 id="totalWitnesses">0</h3>
+                            <p>Anonymous Witnesses</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="roles-section">
+                    <h2><i class="fas fa-id-badge"></i> Your Roles</h2>
+                    <div class="roles-grid">
+                        <div class="role-card" id="investigatorRole">
+                            <i class="fas fa-search"></i>
+                            <h3>Investigator</h3>
+                            <p id="investigatorStatus">Not Authorized</p>
+                        </div>
+                        <div class="role-card" id="judgeRole">
+                            <i class="fas fa-balance-scale"></i>
+                            <h3>Judge</h3>
+                            <p id="judgeStatus">Not Authorized</p>
+                        </div>
+                        <div class="role-card" id="adminRole">
+                            <i class="fas fa-crown"></i>
+                            <h3>Administrator</h3>
+                            <p id="adminStatus">Not Admin</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Investigations Tab -->
+            <div id="investigations" class="tab-content">
+                <div class="section-header">
+                    <h2><i class="fas fa-search"></i> Investigation Management</h2>
+                    <button id="startInvestigationBtn" class="btn btn-primary">
+                        <i class="fas fa-plus"></i> Start New Investigation
+                    </button>
+                </div>
+
+                <div id="startInvestigationForm" class="form-section" style="display: none;">
+                    <h3>Start New Investigation</h3>
+                    <div class="form-group">
+                        <label for="caseId">Case ID:</label>
+                        <input type="number" id="caseId" class="form-control" placeholder="Enter case ID" required>
+                    </div>
+                    <div class="form-actions">
+                        <button id="submitInvestigation" class="btn btn-success">
+                            <i class="fas fa-check"></i> Start Investigation
+                        </button>
+                        <button id="cancelInvestigation" class="btn btn-secondary">
+                            <i class="fas fa-times"></i> Cancel
+                        </button>
+                    </div>
+                </div>
+
+                <div class="investigations-list">
+                    <h3>Active Investigations</h3>
+                    <div id="investigationsList" class="list-container">
+                        <p class="empty-state">No investigations found</p>
+                    </div>
+                </div>
+
+                <div id="participantManagement" class="form-section" style="display: none;">
+                    <h3>Manage Participants</h3>
+                    <div class="form-group">
+                        <label for="participantAddress">Participant Address:</label>
+                        <input type="text" id="participantAddress" class="form-control" placeholder="0x...">
+                    </div>
+                    <div class="form-group">
+                        <label for="investigationIdForParticipant">Investigation ID:</label>
+                        <input type="number" id="investigationIdForParticipant" class="form-control">
+                    </div>
+                    <button id="authorizeParticipant" class="btn btn-primary">
+                        <i class="fas fa-user-plus"></i> Authorize Participant
+                    </button>
+                </div>
+            </div>
+
+            <!-- Evidence Tab -->
+            <div id="evidence" class="tab-content">
+                <div class="section-header">
+                    <h2><i class="fas fa-file-alt"></i> Evidence Management</h2>
+                </div>
+
+                <div class="form-section">
+                    <h3>Submit Evidence</h3>
+                    <div class="form-group">
+                        <label for="evidenceInvestigationId">Investigation ID:</label>
+                        <input type="number" id="evidenceInvestigationId" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="evidenceType">Evidence Type:</label>
+                        <select id="evidenceType" class="form-control" required>
+                            <option value="0">Document</option>
+                            <option value="1">Testimony</option>
+                            <option value="2">Physical</option>
+                            <option value="3">Digital</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="confidentialityLevel">Confidentiality Level (1-100):</label>
+                        <input type="number" id="confidentialityLevel" class="form-control" min="1" max="100" required>
+                    </div>
+                    <button id="submitEvidence" class="btn btn-primary">
+                        <i class="fas fa-upload"></i> Submit Evidence
+                    </button>
+                </div>
+
+                <div class="form-section">
+                    <h3>Verify Evidence</h3>
+                    <div class="form-group">
+                        <label for="verifyInvestigationId">Investigation ID:</label>
+                        <input type="number" id="verifyInvestigationId" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="verifyEvidenceId">Evidence ID:</label>
+                        <input type="number" id="verifyEvidenceId" class="form-control" required>
+                    </div>
+                    <button id="verifyEvidence" class="btn btn-success">
+                        <i class="fas fa-check-circle"></i> Verify Evidence
+                    </button>
+                </div>
+            </div>
+
+            <!-- Witnesses Tab -->
+            <div id="witnesses" class="tab-content">
+                <div class="section-header">
+                    <h2><i class="fas fa-user-secret"></i> Anonymous Witness Testimony</h2>
+                </div>
+
+                <div class="form-section">
+                    <h3>Submit Anonymous Testimony</h3>
+                    <div class="form-group">
+                        <label for="witnessInvestigationId">Investigation ID:</label>
+                        <input type="number" id="witnessInvestigationId" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="credibilityScore">Credibility Score (0-100):</label>
+                        <input type="number" id="credibilityScore" class="form-control" min="0" max="100" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="testimonyHash">Encrypted Testimony Hash:</label>
+                        <input type="number" id="testimonyHash" class="form-control" placeholder="Encrypted testimony hash" required>
+                    </div>
+                    <button id="submitWitnessTestimony" class="btn btn-primary">
+                        <i class="fas fa-shield-alt"></i> Submit Anonymous Testimony
+                    </button>
+                </div>
+
+                <div class="info-card">
+                    <i class="fas fa-info-circle"></i>
+                    <h4>Anonymous Protection</h4>
+                    <p>All witness testimonies are encrypted and anonymous. Your identity is protected through advanced cryptographic techniques.</p>
+                </div>
+            </div>
+
+            <!-- Verdicts Tab -->
+            <div id="verdicts" class="tab-content">
+                <div class="section-header">
+                    <h2><i class="fas fa-balance-scale"></i> Judicial Verdicts</h2>
+                </div>
+
+                <div class="form-section">
+                    <h3>Submit Verdict</h3>
+                    <div class="form-group">
+                        <label for="verdictInvestigationId">Investigation ID:</label>
+                        <input type="number" id="verdictInvestigationId" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="verdict">Verdict:</label>
+                        <select id="verdict" class="form-control" required>
+                            <option value="0">Not Guilty</option>
+                            <option value="1">Guilty</option>
+                            <option value="2">Insufficient Evidence</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="confidence">Confidence Level (0-100):</label>
+                        <input type="number" id="confidence" class="form-control" min="0" max="100" required>
+                    </div>
+                    <button id="submitVerdict" class="btn btn-primary">
+                        <i class="fas fa-gavel"></i> Submit Verdict
+                    </button>
+                </div>
+
+                <div class="form-section">
+                    <h3>Investigation Actions</h3>
+                    <div class="form-group">
+                        <label for="completeInvestigationId">Complete Investigation ID:</label>
+                        <input type="number" id="completeInvestigationId" class="form-control" required>
+                    </div>
+                    <button id="completeInvestigation" class="btn btn-success">
+                        <i class="fas fa-check"></i> Complete Investigation
+                    </button>
+                </div>
+            </div>
+
+            <!-- Admin Tab -->
+            <div id="admin" class="tab-content">
+                <div class="section-header">
+                    <h2><i class="fas fa-cog"></i> Administration</h2>
+                </div>
+
+                <div class="admin-grid">
+                    <div class="admin-section">
+                        <h3>Authorize Investigator</h3>
+                        <div class="form-group">
+                            <label for="investigatorAddress">Investigator Address:</label>
+                            <input type="text" id="investigatorAddress" class="form-control" placeholder="0x...">
+                        </div>
+                        <button id="authorizeInvestigator" class="btn btn-primary">
+                            <i class="fas fa-user-plus"></i> Authorize
+                        </button>
+                        <button id="revokeInvestigator" class="btn btn-danger">
+                            <i class="fas fa-user-minus"></i> Revoke
+                        </button>
+                    </div>
+
+                    <div class="admin-section">
+                        <h3>Authorize Judge</h3>
+                        <div class="form-group">
+                            <label for="judgeAddress">Judge Address:</label>
+                            <input type="text" id="judgeAddress" class="form-control" placeholder="0x...">
+                        </div>
+                        <button id="authorizeJudge" class="btn btn-primary">
+                            <i class="fas fa-user-plus"></i> Authorize
+                        </button>
+                        <button id="revokeJudge" class="btn btn-danger">
+                            <i class="fas fa-user-minus"></i> Revoke
+                        </button>
+                    </div>
+
+                    <div class="admin-section">
+                        <h3>Archive Investigation</h3>
+                        <div class="form-group">
+                            <label for="archiveInvestigationId">Investigation ID:</label>
+                            <input type="number" id="archiveInvestigationId" class="form-control">
+                        </div>
+                        <button id="archiveInvestigation" class="btn btn-warning">
+                            <i class="fas fa-archive"></i> Archive
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <div id="transactionModal" class="modal">
+            <div class="modal-content">
+                <h3><i class="fas fa-clock"></i> Transaction Processing</h3>
+                <p id="transactionMessage">Processing your transaction...</p>
+                <div class="loading-spinner"></div>
+                <div id="transactionResult" style="display: none;">
+                    <p id="resultMessage"></p>
+                    <button id="closeModal" class="btn btn-primary">Close</button>
+                </div>
+            </div>
+        </div>
+
+        <footer class="footer">
+            <p>&copy; 2025 Anonymous Court Investigation System. Powered by FHE Technology.</p>
+            <div class="footer-links">
+                <a href="#" class="footer-link">Privacy Policy</a>
+                <a href="#" class="footer-link">Terms of Service</a>
+                <a href="#" class="footer-link">Documentation</a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Multiple CDN fallback system
+        function loadEthers() {
+            const cdns = [
+                'https://cdnjs.cloudflare.com/ajax/libs/ethers/5.7.2/ethers.umd.min.js',
+                'https://unpkg.com/ethers@5.7.2/dist/ethers.umd.min.js',
+                'https://cdn.jsdelivr.net/npm/ethers@5.7.2/dist/ethers.umd.min.js'
+            ];
+
+            let currentIndex = 0;
+
+            function tryLoadScript() {
+                if (currentIndex >= cdns.length) {
+                    showLibraryError();
+                    return;
+                }
+
+                const script = document.createElement('script');
+                script.src = cdns[currentIndex];
+                script.onload = function() {
+                    console.log(`Ethers.js loaded from: ${cdns[currentIndex]}`);
+                    initializeApp();
+                };
+                script.onerror = function() {
+                    console.log(`Failed to load from: ${cdns[currentIndex]}`);
+                    currentIndex++;
+                    tryLoadScript();
+                };
+                document.head.appendChild(script);
+            }
+
+            tryLoadScript();
+        }
+
+        function showLibraryError() {
+            console.log('All CDNs failed, redirecting to offline page...');
+
+            // Show immediate error message
+            document.body.innerHTML = `
+                <div style="text-align:center;margin-top:50px;padding:20px;font-family:Arial,sans-serif;">
+                    <h2>🌐 Loading Offline Mode...</h2>
+                    <p>Redirecting to network troubleshooting page...</p>
+                    <div style="margin:20px;">
+                        <div style="width:50px;height:50px;border:3px solid #f3f3f3;border-top:3px solid #3498db;border-radius:50%;animation:spin 1s linear infinite;margin:0 auto;"></div>
+                    </div>
+                    <style>
+                        @keyframes spin {
+                            0% { transform: rotate(0deg); }
+                            100% { transform: rotate(360deg); }
+                        }
+                    </style>
+                </div>
+            `;
+
+            // Redirect after 2 seconds
+            setTimeout(() => {
+                window.location.href = 'offline.html';
+            }, 2000);
+        }
+
+        function initializeApp() {
+            // Initialize the app after ethers.js is loaded
+            if (typeof ethers !== 'undefined') {
+                console.log('Starting app initialization...');
+                window.app = new AnonymousCourtInvestigationApp();
+            } else {
+                showLibraryError();
+            }
+        }
+
+        // Start loading ethers.js
+        loadEthers();
+    </script>
+    <script src="app.js"></script>
+</body>
+</html>
