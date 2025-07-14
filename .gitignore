@@ -1,0 +1,59 @@
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Hardhat files
+cache/
+artifacts/
+typechain-types/
+
+# Coverage reports
+coverage/
+coverage.json
+.coverage_cache/
+.coverage_contracts/
+
+# Test outputs
+gas-report.txt
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Build outputs
+dist/
+build/
+out/
+
+# Temporary files
+*.tmp
+*.temp
+.tmp/
+.temp/
+
+# Deployment artifacts (optional - uncomment if you don't want to track deployments)
+# deployments/
+
+# Flattened contracts
+flattened/
+flat/
