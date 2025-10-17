@@ -10,9 +10,17 @@
 
 A blockchain-based anonymous court investigation system that enables secure, private, and transparent judicial investigations using **Fully Homomorphic Encryption (FHE)** technology from **Zama FHEVM**.
 
-**🌐 Live Demo**: [Coming Soon]
-**📹 Video Demo**: [Demo Video](./demo.mp4)
-**📋 Contract**: [View on Sepolia Etherscan](https://sepolia.etherscan.io/)
+## 🎯 Core Concept
+
+**FHE Contract for Anonymous Court Investigation** - A privacy-preserving judicial research system that leverages Fully Homomorphic Encryption to enable confidential court proceedings while maintaining transparency and accountability. All sensitive data (case IDs, evidence, witness testimonies, verdicts) are encrypted on-chain, allowing computation on encrypted data without revealing the underlying information.
+
+**🌐 Live Demo**: [https://fhe-court-investigation.vercel.app/](https://fhe-court-investigation.vercel.app/)
+
+**📹 Video Demo**: Download and watch `demo.mp4` (video demonstration file included in repository)
+
+**💻 GitHub Repository**: [https://github.com/IrwinDenesik/FHECourtInvestigation](https://github.com/IrwinDenesik/FHECourtInvestigation)
+
+**📋 Smart Contract**: Deployed on Sepolia Testnet - [View on Etherscan](https://sepolia.etherscan.io/)
 
 ---
 
@@ -152,8 +160,8 @@ Sepolia ETH (for testnet deployment)
 
 ```bash
 # Clone repository
-git clone https://github.com/your-username/anonymous-court-investigation.git
-cd anonymous-court-investigation
+git clone https://github.com/IrwinDenesik/FHECourtInvestigation.git
+cd FHECourtInvestigation
 
 # Install dependencies
 npm install
@@ -1099,10 +1107,11 @@ copies or substantial portions of the Software.
 
 ### Project Links
 
-- **Repository**: https://github.com/your-username/anonymous-court-investigation
+- **Repository**: https://github.com/IrwinDenesik/FHECourtInvestigation
+- **Live Demo**: https://fhe-court-investigation.vercel.app/
 - **Documentation**: [docs/](./docs/)
-- **Issues**: https://github.com/your-username/anonymous-court-investigation/issues
-- **Discussions**: https://github.com/your-username/anonymous-court-investigation/discussions
+- **Issues**: https://github.com/IrwinDenesik/FHECourtInvestigation/issues
+- **Discussions**: https://github.com/IrwinDenesik/FHECourtInvestigation/discussions
 
 ### Community
 
