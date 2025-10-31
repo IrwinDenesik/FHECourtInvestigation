@@ -16,7 +16,7 @@ A blockchain-based anonymous court investigation system that enables secure, pri
 
 **🌐 Live Demo (React App)**: [https://anonymous-court-investigation.vercel.app/](https://anonymous-court-investigation.vercel.app/) ✨ **NEW**
 
-**📹 Video Demo**: See `AnonymousCourtInvestigation.mp4` in the frontend folder
+**📹 Video Demo**: See `demo.mp4` in the frontend folder
 
 **💻 GitHub Repository**: [https://github.com/IrwinDenesik/FHECourtInvestigation](https://github.com/IrwinDenesik/FHECourtInvestigation)
 
