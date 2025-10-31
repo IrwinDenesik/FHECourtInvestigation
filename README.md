@@ -14,13 +14,13 @@ A blockchain-based anonymous court investigation system that enables secure, pri
 
 **FHE Contract for Anonymous Court Investigation** - A privacy-preserving judicial research system that leverages Fully Homomorphic Encryption to enable confidential court proceedings while maintaining transparency and accountability. All sensitive data (case IDs, evidence, witness testimonies, verdicts) are encrypted on-chain, allowing computation on encrypted data without revealing the underlying information.
 
-**🌐 Live Demo**: [https://fhe-court-investigation.vercel.app/](https://fhe-court-investigation.vercel.app/)
+**🌐 Live Demo (React App)**: [https://anonymous-court-investigation.vercel.app/](https://anonymous-court-investigation.vercel.app/) ✨ **NEW**
 
-**📹 Video Demo**: Download and watch `demo.mp4` (video demonstration file included in repository)
+**📹 Video Demo**: See `AnonymousCourtInvestigation.mp4` in the frontend folder
 
 **💻 GitHub Repository**: [https://github.com/IrwinDenesik/FHECourtInvestigation](https://github.com/IrwinDenesik/FHECourtInvestigation)
 
-**📋 Smart Contract**: Deployed on Sepolia Testnet - [View on Etherscan](https://sepolia.etherscan.io/)
+**📋 Smart Contract**: Deployed on Sepolia Testnet - [View on Etherscan](https://sepolia.etherscan.io/address/0x88907E07dAAda5Dae20C412B12B293DBC172bF54)
 
 ---
 
@@ -48,6 +48,7 @@ A blockchain-based anonymous court investigation system that enables secure, pri
 - **CI/CD Pipeline** - Automated testing, security checks, and coverage reporting
 - **Interactive CLI** - Easy contract interaction with menu-driven interface
 - **Complete Documentation** - 2,200+ lines of guides and best practices
+- **React Frontend** - Full dApp with wallet integration and real-time updates ✨ **NEW**
 
 ---
 
@@ -156,7 +157,7 @@ Ethereum Wallet (MetaMask recommended)
 Sepolia ETH (for testnet deployment)
 ```
 
-### Installation
+### Backend (Smart Contract) Setup
 
 ```bash
 # Clone repository
@@ -173,6 +174,26 @@ cp .env.example .env
 # - PRIVATE_KEY
 # - ETHERSCAN_API_KEY
 # - ADMIN_ADDRESS
+```
+
+### Frontend (React Application) Setup - NEW
+
+```bash
+# Navigate to frontend directory
+cd anonymous-court-investigation
+
+# Install dependencies
+npm install
+
+# Start development server
+npm run dev
+# Application will be available at http://localhost:3000
+
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
 ```
 
 ### Compile Contracts
@@ -217,6 +238,49 @@ npm run simulate:sepolia
 ---
 
 ## 🔧 Technical Implementation
+
+### Frontend Architecture (React + Vite - NEW)
+
+The frontend application provides a complete user interface for interacting with the smart contract:
+
+#### Component Architecture
+
+```
+App.tsx (Main Container)
+├── Header.tsx (Wallet Connection)
+├── Tabs.tsx (Navigation)
+└── Content Area
+    ├── Dashboard.tsx (Statistics & Overview)
+    ├── Investigations.tsx (Investigation Management)
+    ├── Evidence.tsx (Evidence Submission)
+    ├── Witnesses.tsx (Anonymous Testimonies)
+    ├── Verdicts.tsx (Judicial Verdicts)
+    ├── Admin.tsx (Role Management)
+    └── Alerts.tsx (Notifications)
+```
+
+#### Custom React Hooks
+
+```typescript
+// useWallet.ts - MetaMask connection management
+const { account, connect, disconnect, isConnected } = useWallet();
+
+// useContract.ts - Smart contract interaction
+const { contract, writeContract, readContract } = useContract(contractAddress, abi);
+
+// useInvestigations.ts - Investigation data management
+const { investigations, loading, refresh } = useInvestigations(contract);
+```
+
+#### Key Features
+
+- **Wallet Integration**: MetaMask connection with account management
+- **Real-Time Updates**: Automatic data refresh after transactions
+- **FHE Encryption**: Client-side encryption using @fhevm/sdk
+- **Role-Based UI**: Dynamic interface based on user roles (Admin, Investigator, Judge)
+- **Responsive Design**: Mobile-friendly CSS3 styling
+- **Transaction Feedback**: Toast notifications for all blockchain operations
+- **Error Handling**: Comprehensive error handling and user feedback
 
 ### FHEVM Integration
 
@@ -564,8 +628,10 @@ All files           |      100 |    98.75 |      100 |      100 |               
 
 ## 📁 Project Structure
 
+### Backend (Smart Contracts)
+
 ```
-anonymous-court-investigation/
+anonymous-court-investigation/ (Hardhat Project)
 ├── contracts/
 │   └── AnonymousCourtInvestigation.sol     # Main smart contract (500+ lines)
 │
@@ -612,7 +678,50 @@ anonymous-court-investigation/
 ├── hardhat.config.cjs                       # Hardhat configuration
 ├── package.json                             # Dependencies & scripts
 ├── LICENSE                                  # MIT License
-└── README.md                                # This file
+└── README.md                                # This file (Backend documentation)
+```
+
+### Frontend (React Application - NEW)
+
+```
+anonymous-court-investigation/ (React + Vite Project)
+├── src/
+│   ├── components/          # React components
+│   │   ├── Header.tsx       # Application header with wallet connection
+│   │   ├── Tabs.tsx         # Navigation tabs
+│   │   ├── Dashboard.tsx    # Dashboard with statistics
+│   │   ├── Investigations.tsx # Investigation management
+│   │   ├── Evidence.tsx     # Evidence submission and verification
+│   │   ├── Witnesses.tsx    # Anonymous witness testimonies
+│   │   ├── Verdicts.tsx     # Judicial verdicts
+│   │   ├── Admin.tsx        # Administrative functions
+│   │   └── Alerts.tsx       # Alert notifications
+│   │
+│   ├── hooks/               # Custom React hooks
+│   │   ├── useWallet.ts     # Wallet connection management
+│   │   ├── useContract.ts   # Contract interaction utilities
+│   │   └── useInvestigations.ts # Investigation data management
+│   │
+│   ├── lib/                 # Utilities and configurations
+│   │   ├── contract.ts      # Contract ABI and configuration
+│   │   └── utils.ts         # Helper functions
+│   │
+│   ├── types/               # TypeScript type definitions
+│   │   └── index.ts         # Application types
+│   │
+│   ├── App.tsx              # Main application component
+│   ├── App.css              # Application styles
+│   └── main.tsx             # Application entry point
+│
+├── contracts/               # Smart contract source code (reference)
+├── index.html               # HTML template
+├── package.json             # Frontend dependencies
+├── tsconfig.json            # TypeScript configuration
+├── vite.config.ts           # Vite configuration
+├── vercel.json              # Vercel deployment configuration
+├── AnonymousCourtInvestigation.mp4  # Demo video
+├── AnonymousCourtInvestigation.png  # Screenshot
+└── README.md                # Frontend documentation
 ```
 
 ---
@@ -632,11 +741,19 @@ Block Explorer: https://sepolia.etherscan.io
 
 **Deployed Contract:**
 ```
-Contract Address: [View deployment-info.json after deployment]
+Contract Address: 0x88907E07dAAda5Dae20C412B12B293DBC172bF54
 Deployer: [Your address]
 Deployment Date: [Timestamp]
 Transaction Hash: [0x...]
-Etherscan Link: https://sepolia.etherscan.io/address/[CONTRACT_ADDRESS]
+Etherscan Link: https://sepolia.etherscan.io/address/0x88907E07dAAda5Dae20C412B12B293DBC172bF54
+```
+
+**Deployed Frontend:**
+```
+Live Application: https://anonymous-court-investigation.vercel.app/
+Platform: Vercel
+Status: Production
+Features: Full dApp with wallet integration, FHE encryption, real-time updates
 ```
 
 **Get Sepolia ETH:**
@@ -829,19 +946,29 @@ See [SECURITY_AUDIT.md](./SECURITY_AUDIT.md) for complete security guide.
 - **OpenZeppelin** `^5.0.0` - Security standards (AccessControl, Pausable, ReentrancyGuard)
 - **Hardhat** `^2.22.0` - Development environment
 
+### Frontend Application (NEW)
+
+- **React** `^18.2.0` - Modern UI framework with hooks
+- **TypeScript** `^5.3.3` - Type-safe development
+- **Vite** `^5.0.8` - Fast build tool and dev server
+- **@fhevm/sdk** `^0.5.0` - FHE SDK for encrypted operations
+- **Ethers.js** `^6.9.0` - Ethereum library for blockchain interaction
+- **CSS3** - Modern responsive styling
+- **Font Awesome** `^6.0.0` - Professional iconography
+
 ### Development Tools
 
 - **Hardhat Toolbox** - Complete development suite
-- **Ethers.js** `^6.13.0` - Ethereum library
 - **Chai** `^4.3.10` - Testing assertions
 - **Mocha** - Test runner
+- **@vitejs/plugin-react** `^4.2.1` - Vite React plugin
 
 ### Code Quality
 
 - **Solhint** `^5.0.0` - Solidity linter
-- **ESLint** `^8.50.0` - JavaScript/TypeScript linter
+- **ESLint** `^8.56.0` - JavaScript/TypeScript linter with React plugins
 - **Prettier** `^3.3.0` - Code formatter
-- **TypeScript** `^5.9.3` - Type safety
+- **@typescript-eslint** `^6.15.0` - TypeScript ESLint integration
 
 ### CI/CD & Automation
 
@@ -856,6 +983,7 @@ See [SECURITY_AUDIT.md](./SECURITY_AUDIT.md) for complete security guide.
 - **Sepolia Testnet** (Chain ID: 11155111)
 - **Infura** / **Alchemy** - RPC providers
 - **Etherscan** - Block explorer & verification
+- **Vercel** - Frontend hosting and deployment
 
 ---
 
@@ -1032,12 +1160,14 @@ Contributions are welcome! Please follow these guidelines:
 - [x] Performance optimization
 - [x] Complete documentation
 
-### Phase 2: Frontend (Q1 2025)
-- [ ] React + Vite frontend
-- [ ] MetaMask integration
-- [ ] Client-side FHE encryption
-- [ ] Investigation dashboard
-- [ ] Real-time updates
+### Phase 2: Frontend (Q1 2025) ✅ (Complete)
+- [x] React + Vite frontend
+- [x] MetaMask integration
+- [x] Client-side FHE encryption
+- [x] Investigation dashboard
+- [x] Real-time updates
+
+**Frontend Application Available:** See `anonymous-court-investigation/` folder for the complete React application.
 
 ### Phase 3: Enhanced Privacy (Q2 2025)
 - [ ] Advanced FHE operations
@@ -1131,25 +1261,35 @@ copies or substantial portions of the Software.
 ## 📊 Project Stats
 
 ```
-Smart Contract: 500+ lines
-Test Suite: 600+ lines (45+ tests)
-Scripts: 1,000+ lines
-Documentation: 2,200+ lines
-Total Code: 4,300+ lines
+Backend:
+  Smart Contract: 500+ lines
+  Test Suite: 600+ lines (45+ tests)
+  Scripts: 1,000+ lines
+  Documentation: 2,200+ lines
 
-Test Coverage: 95%+
-Security Checks: 5 automated
-CI/CD Workflows: 3 parallel
-Deployment Networks: Sepolia + Localhost
+Frontend (NEW):
+  React Components: 9 components
+  Custom Hooks: 3 hooks
+  TypeScript Files: 15+ files
+  Total Frontend Code: 1,500+ lines
+
+Combined:
+  Total Code: 5,800+ lines
+  Test Coverage: 95%+
+  Security Checks: 5 automated
+  CI/CD Workflows: 3 parallel
+  Deployment Networks: Sepolia + Localhost
+  Live Deployments: 1 (Vercel)
 ```
 
 ---
 
 **Built with ❤️ using Zama FHEVM - Privacy-Preserving Justice on Blockchain**
 
-**Version**: 1.0.0
+**Version**: 2.0.0 (Backend + Frontend)
 **Status**: Production Ready
-**Last Updated**: 2025-10-26
+**Last Updated**: 2025-11-04
+**Frontend Added**: React + Vite application with full dApp functionality
 
 ---
 
